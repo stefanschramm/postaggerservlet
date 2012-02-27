@@ -1,0 +1,15 @@
+Kompilieren des Servlets:
+
+mvn clean
+mvn package
+mvn war:war
+
+Deployen des WAR-Archivs auf Jetty:
+
+sudo cp target/postaggerservlet-1.0-SNAPSHOT.war /var/lib/jetty/webapps/postagger.war
+/etc/init.d/jetty restart
+
+Aufruf des Servlets:
+
+http://localhost:8080/postagger/tagger?text=Das+ist+ein+kleines+Beispiel.
+
