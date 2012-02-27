@@ -7,7 +7,7 @@ mvn war:war
 Deployen des WAR-Archivs auf Jetty:
 
 sudo cp target/postaggerservlet-1.0-SNAPSHOT.war /var/lib/jetty/webapps/postagger.war
-/etc/init.d/jetty restart
+sudo /etc/init.d/jetty restart
 
 Aufruf des Servlets:
 
