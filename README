@@ -11,5 +11,5 @@ sudo /etc/init.d/jetty restart
 
 Aufruf des Servlets:
 
-http://localhost:8080/postagger/tagger?text=Das+ist+ein+kleines+Beispiel.
+http://localhost:8080/postagger/postagger?text=Das+ist+ein+kleines+Beispiel.
 
