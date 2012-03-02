@@ -43,10 +43,11 @@ public class TaggerServlet extends HttpServlet {
 		} catch (Exception e) {
 		}
 
-		JSONObject response = new JSONObject();
-		response.put("taggedText", taggedText);
+		// JSONObject response = new JSONObject();
+		// response.put("taggedText", taggedText);
+		out.print(taggedText);
 
-		out.print("callback(" + response + ");");
+		// out.print("callback(" + response + ");");
 		out.close();
 	}
 }
