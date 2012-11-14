@@ -1,37 +1,48 @@
 package net.stefanschramm.postaggerservlet;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.json.simple.JSONObject;
 
-import edu.stanford.nlp.ling.Sentence;
-import edu.stanford.nlp.ling.TaggedWord;
-import edu.stanford.nlp.ling.HasWord;
 import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 
 public class TaggerServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	private MaxentTagger tagger;
+	private static final String defaultLanguage = "de";
+	private Map<String, MaxentTagger> taggers = new HashMap<String, MaxentTagger>();
 
 	public TaggerServlet() throws IOException, ClassNotFoundException {
-		String taggerFile = getClass().getResource("/models/german-fast.tagger")
-				.getFile();
-		tagger = new MaxentTagger(taggerFile);
+		taggers.put(
+				"de",
+				new MaxentTagger(getClass().getResource(
+						"/models/german-fast.tagger").getFile()));
+		taggers.put(
+				"en",
+				new MaxentTagger(getClass().getResource(
+						"/models/wsj-0-18-left3words.tagger").getFile()));
 	}
 
-	@SuppressWarnings({ "static-access", "unchecked" })
+	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) throws ServletException,
 			IOException {
+
+		MaxentTagger tagger;
+		String language = httpServletRequest.getParameter("language");
+		if (language == null || !taggers.containsKey(language)) {
+			tagger = taggers.get(defaultLanguage);
+		} else {
+			tagger = taggers.get(language);
+		}
 
 		httpServletResponse.setContentType("text/javascript");
 		PrintWriter out = httpServletResponse.getWriter();
@@ -43,11 +54,10 @@ public class TaggerServlet extends HttpServlet {
 		} catch (Exception e) {
 		}
 
-		// JSONObject response = new JSONObject();
-		// response.put("taggedText", taggedText);
-		out.print(taggedText);
+		JSONObject response = new JSONObject();
+		response.put("taggedText", taggedText);
 
-		// out.print("callback(" + response + ");");
+		out.print("callback(" + response + ");");
 		out.close();
 	}
 }
